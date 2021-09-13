@@ -2,7 +2,7 @@ from random import randint
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from perlin_noise import PerlinNoise
-from ursina.shaders import basic_lighting_shader
+from ursina.shaders import lit_with_shadows_shader
 
 class BGinv(Entity):
     def __init__(self):
@@ -55,6 +55,7 @@ class Inventory(Entity):
 
 
 app = Ursina()
+
 bg = BG()
 bginv = BGinv()
 vid =Entity(model='quad', position = Vec2(0,0),scale = (1.779,1),parent = camera.ui,texture = 'devjang intro.mp4',)
@@ -125,7 +126,7 @@ class Voxel(Button):
             texture=texture,
             color=color.color(0, 0, random.uniform(0.9, 1)),
             scale=0.5,
-            shader=basic_lighting_shader,
+            shader = lit_with_shadows_shader,
             mesh='triangle'
         )
 
@@ -174,7 +175,7 @@ class Hand(Entity):
             scale=0.2,
             rotation=Vec3(150, -10, 0),
             position=Vec2(0.7, -0.6),
-        )
+            shader = lit_with_shadows_shader)
 
     def active(self):
         self.position = Vec2(0.6, -0.5)
@@ -213,11 +214,11 @@ for z in range(20):
 
 player = FirstPersonController(jump_height=2)
 player.position = Vec3(5, 5, 5)
-Sky(texture=sky_texture)
+Sky(texture=sky_texture,shader = False)
 hand = Hand()
 pivot = Entity()
-PointLight(parent=camera, color=color.rgba(0, 0, 0.75, 100), position=(0, 10, -1.5))
-AmbientLight(color=color.rgba(100, 100, 100, 0.1))
+sun = DirectionalLight(rotation=(45,45,45))
 print("@2021Copyright @DevjangStudios")
 print('This Worlds seed was = ', seeder, )
+
 app.run()
